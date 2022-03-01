@@ -4,7 +4,7 @@ var CurrencyFormat = require("react-currency-format");
 
 export default function Calculator() {
   const [inputItem, setInputItem] = useState({
-    asking_price: 0,
+    asking_price: 800000,
     down_payment: 20,
     rate: 1.35,
     loan_years: 30
