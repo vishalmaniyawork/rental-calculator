@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+var CurrencyFormat = require("react-currency-format");
 
 export default function Calculator() {
   const [inputItem, setInputItem] = useState({
@@ -8,13 +9,38 @@ export default function Calculator() {
     rate: 1.35,
     loan_years: 30
   });
-  const baseURL = "https://api.sampleapis.com/beers/ale";
+
+  const [resItem, setResItem] = useState({
+    proprty_tax_yearl: 0,
+    proprty_tax_monthly: 0,
+    insurance_monthly: 0,
+    monthly_payment: 0,
+    revenue: 0,
+    down_payment_amount: 0,
+    lawyer_fees: 0,
+    welcome_tax: 0,
+    inspection_fees: 500,
+    cash_needed: 0,
+    cash_needed_pp: 0
+  });
+  const baseURL = "https://rental-calculator-api.herokuapp.com/calculate";
+  // const baseURL = "https://kdkuby.sse.codesandbox.io/";
 
   useEffect(() => {
-    console.log("changed");
-    fetch(baseURL)
+    console.log("call api ==>");
+    fetch(
+      baseURL +
+        "?" +
+        Object.keys(inputItem)
+          .map((key) => key + "=" + inputItem[key])
+          .join("&")
+    )
       .then((resp) => resp.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        console.log(data);
+        setResItem(data);
+        console.log("RESITEM", resItem);
+      });
   }, [inputItem]);
 
   return (
@@ -81,8 +107,128 @@ export default function Calculator() {
       <hr />
       <table>
         <tr>
+          <th align="left">Property Tax(Yerly)</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.proprty_tax_yearl}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">Proprty Tax(Monthly)</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.proprty_tax_monthly}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">Insurace(Monthly)</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.insurance_monthly}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <hr />
+        <tr>
+          <th align="left">Down Payment</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.down_payment_amount}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">Lawyer Fees</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.lawyer_fees}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">Welcome Tax</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.welcome_tax}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">Inspection Fees</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.inspection_fees}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <hr />
+        <tr>
           <th align="left">Monthly Payment</th>
-          <td>${inputItem.asking_price}</td>
+          <td>
+            <CurrencyFormat
+              value={resItem.monthly_payment}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">Revenue</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.revenue}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <hr />
+        <tr>
+          <th align="left">Cash Nedded</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.cash_needed}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">Cash Needded (PP)</th>
+          <td>
+            <CurrencyFormat
+              value={resItem.cash_needed_pp}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+          </td>
         </tr>
       </table>
     </div>
